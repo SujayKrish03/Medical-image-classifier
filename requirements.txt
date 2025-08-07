@@ -1,0 +1,8 @@
+torch
+torchvision
+Pillow
+requests
+beautifulsoup4
+gradio
+pdf2image
+kaggle
