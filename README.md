@@ -17,3 +17,29 @@ The objective of this project is to develop a system that can accurately classif
 A CNN model is then designed and trained on this labeled dataset. The CNN architecture typically consists of convolutional layers to extract features, pooling layers to reduce dimensionality, and fully connected layers to perform the final classification. The model is trained using cross-entropy loss and optimized using an algorithm like Adam. After sufficient training, the model learns to distinguish between patterns found in medical vs. non-medical images.
 To extend usability, the system includes modules for classifying images not only from direct uploads but also from web URLs and PDFs using scraping and image extraction tools. These inputs are passed through the trained CNN model to predict and return the result along with thumbnail previews. A Gradio interface wraps the entire pipeline to allow users to easily interact with the tool in a web-based environment.
 
+
+
+# Performance and Model efficiency Considerations
+# 1. Model Complexity vs. Speed
+Lightweight CNN: You're using a relatively shallow CNN, which is fast and resource-efficient—ideal for deployment on systems with limited computational power (e.g., laptops, web servers, or mobile devices).
+Tradeoff: Deeper networks (e.g., ResNet, DenseNet) might offer higher accuracy but require more training time and GPU memory.
+
+# 2. Image Size
+Standardized Input: Resizing all images to a common resolution (e.g., 224×224) balances detail retention with memory efficiency.
+Performance Impact: Smaller images speed up training/inference but may lose fine medical details.
+
+# 3. Data Loading
+Use of DataLoaders with num_workers and pin_memory=True improves data pipeline speed.
+Preprocessing (resizing, normalization) is done on the fly without storing redundant data.
+
+# 4. Hardware Utilization
+GPU Acceleration: Model is trained and evaluated using cuda if available, which drastically speeds up training and inference.
+Memory Management: Avoids memory leaks by clearing CUDA cache when needed.
+
+# 5. Model Evaluation Efficiency
+Evaluation uses batch-based prediction to avoid loading all test data into memory.
+Accuracy metric computed efficiently by accumulating correct predictions.
+
+# 6. Inference Time
+On a trained model, classifying a single image (even from PDF or web scraping) is nearly real-time—suitable for interactive tools like your Gradio app.
+
